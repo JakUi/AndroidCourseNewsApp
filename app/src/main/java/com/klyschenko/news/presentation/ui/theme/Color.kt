@@ -1,4 +1,4 @@
-package com.klyschenko.news.ui.theme
+package com.klyschenko.news.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

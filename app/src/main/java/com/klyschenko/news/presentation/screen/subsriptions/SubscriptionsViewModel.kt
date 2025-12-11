@@ -64,7 +64,7 @@ class SubscriptionsViewModel @Inject constructor(
 
             is SubscriptionsCommands.InputTopic -> {
                 _state.update { previousState ->
-                    previousState.copy(query = previousState.query)
+                    previousState.copy(query = command.query)
                 }
             }
 

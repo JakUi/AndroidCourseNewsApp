@@ -1,7 +1,10 @@
 package com.klyschenko.news.domain.usecase
 
 import com.klyschenko.news.domain.repository.NewsRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.coroutines.coroutineContext
 
 
 class AddSubscriptionsUseCase @Inject constructor(
@@ -10,6 +13,8 @@ class AddSubscriptionsUseCase @Inject constructor(
 
     suspend operator fun invoke(topic: String) {
         newsRepository.addSubscription(topic)
-        newsRepository.updateArticlesForTopic(topic)
+        CoroutineScope(coroutineContext).launch {
+            newsRepository.updateArticlesForTopic(topic)
+        }
     }
 }

@@ -2,6 +2,8 @@
 
 package com.klyschenko.news.presentation.screen.subsriptions
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -42,12 +44,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.klyschenko.news.R
@@ -364,9 +368,13 @@ private fun ArticleCard(
                 .padding(horizontal = 16.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp)
         ) {
+            val context: Context = LocalContext.current
             Button(
                 modifier = Modifier.weight(1f),
-                onClick = {}
+                onClick = {
+                    val intent = Intent( Intent.ACTION_VIEW, article.url.toUri())
+                    context.startActivity(intent)
+                }
             ) {
                 Icon(
                     imageVector = CustomIcons.openInNew,
@@ -379,7 +387,13 @@ private fun ArticleCard(
             }
             Button(
                 modifier = Modifier.weight(1f),
-                onClick = {}
+                onClick = {
+                    val intent = Intent( Intent.ACTION_SEND).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, "${article.title}\n\n${article.url}")
+                    }
+                    context.startActivity(intent)
+                }
             ) {
                 Icon(
                     imageVector = Icons.Default.Share,

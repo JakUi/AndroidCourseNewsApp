@@ -2,6 +2,7 @@ package com.klyschenko.news.di
 
 import android.content.Context
 import androidx.room.Room
+import androidx.work.WorkManager
 import com.klyschenko.news.data.local.NewsDao
 import com.klyschenko.news.data.local.NewsDatabase
 import com.klyschenko.news.data.remote.NewsApiService
@@ -32,6 +33,12 @@ interface DataModule {
 
 
     companion object {
+
+        @Provides
+        @Singleton
+        fun provideWorkManager(
+            @ApplicationContext context: Context
+        ): WorkManager = WorkManager.getInstance(context)
 
         @Provides
         @Singleton

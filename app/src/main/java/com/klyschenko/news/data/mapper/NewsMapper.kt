@@ -3,6 +3,7 @@ package com.klyschenko.news.data.mapper
 import com.klyschenko.news.data.local.ArticleDBModel
 import com.klyschenko.news.data.remote.NewsResponseDto
 import com.klyschenko.news.domain.entity.Article
+import com.klyschenko.news.domain.entity.Interval
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -20,7 +21,11 @@ fun NewsResponseDto.toDbModels(topic: String): List<ArticleDBModel> {
     }
 }
 
-fun List<ArticleDBModel>.toEntities(): List<Article>  {
+fun Int.toInterval(): Interval {
+    return Interval.entries.first { it.minutes == this }
+}
+
+fun List<ArticleDBModel>.toEntities(): List<Article> {
     return map {
         Article(
             title = it.title,

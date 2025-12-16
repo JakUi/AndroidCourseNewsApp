@@ -7,7 +7,9 @@ import com.klyschenko.news.data.local.NewsDao
 import com.klyschenko.news.data.local.NewsDatabase
 import com.klyschenko.news.data.remote.NewsApiService
 import com.klyschenko.news.data.repository.NewsRepositoryImpl
+import com.klyschenko.news.data.repository.SettingsRepositoryImpl
 import com.klyschenko.news.domain.repository.NewsRepository
+import com.klyschenko.news.domain.repository.SettingsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -25,11 +27,18 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 interface DataModule {
+
     @Binds
     @Singleton
     fun bindNewsRepository(
         impl: NewsRepositoryImpl
     ): NewsRepository
+
+    @Binds
+    @Singleton
+    fun bindSettingsRepository(
+        impl: SettingsRepositoryImpl
+    ): SettingsRepository
 
 
     companion object {

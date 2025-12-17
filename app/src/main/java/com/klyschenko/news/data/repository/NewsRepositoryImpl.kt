@@ -12,22 +12,15 @@ import com.klyschenko.news.data.local.NewsDao
 import com.klyschenko.news.data.local.SubscriptionDBModel
 import com.klyschenko.news.data.mapper.toDbModels
 import com.klyschenko.news.data.mapper.toEntities
-import com.klyschenko.news.data.mapper.toRefreshConfig
 import com.klyschenko.news.data.remote.NewsApiService
 import com.klyschenko.news.domain.entity.Article
 import com.klyschenko.news.domain.entity.RefreshConfig
 import com.klyschenko.news.domain.repository.NewsRepository
-import com.klyschenko.news.domain.repository.SettingsRepository
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -35,19 +28,9 @@ import javax.inject.Inject
 class NewsRepositoryImpl @Inject constructor(
     private val newsDao: NewsDao,
     private val newsApiService: NewsApiService,
-    private val workManager: WorkManager,
-    private val settingsRepository: SettingsRepository
+    private val workManager: WorkManager
 ) : NewsRepository {
 
-    private val scope = CoroutineScope(Dispatchers.IO)
-
-    init {
-        settingsRepository.getSettings()
-            .map { it.toRefreshConfig() }
-            .distinctUntilChanged()
-            .onEach { startBackgroundRefresh(it) }
-            .launchIn(scope)
-    }
 
     override fun getAllSubscriptions(): Flow<List<String>> {
         return newsDao.getAllSubscriptions().map { subscriptions ->
@@ -97,7 +80,7 @@ class NewsRepositoryImpl @Inject constructor(
         }
     }
 
-    private fun startBackgroundRefresh(refreshConfig: RefreshConfig) {
+    override fun startBackgroundRefresh(refreshConfig: RefreshConfig) {
         val constraints = Constraints.Builder() // выставляем ограничения на рабоу worker'a (service)
             .setRequiredNetworkType(
                 if (refreshConfig.wifiOnly)  {

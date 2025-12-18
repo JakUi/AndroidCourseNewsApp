@@ -7,6 +7,7 @@ interface NewsApiService {
 
     @GET("v2/everything?apiKey=908fa26c54694411a0cc7b96431a6d98")
     suspend fun loadArticles(
-        @Query("q") topic: String // будет подставлено в url в качестве параметра
+        @Query("q") topic: String, // будет подставлено в url в качестве параметра
+        @Query("language") language: String
     ): NewsResponseDto // Retrofit сконвертирует ответ в экземпляр NewsResponseDto
 }

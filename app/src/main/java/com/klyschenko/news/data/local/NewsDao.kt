@@ -25,7 +25,7 @@ interface NewsDao {
     fun getAllArticlesByTopics(topics: List<String>): Flow<List<ArticleDBModel>>
 
     @Insert(onConflict = IGNORE)
-    suspend fun addArticles(articles: List<ArticleDBModel>)
+    suspend fun addArticles(articles: List<ArticleDBModel>): List<Long>
 
     @Query("DELETE FROM articles WHERE topic IN (:topics)")
     suspend fun deleteArticlesByTopics(topics: List<String>)

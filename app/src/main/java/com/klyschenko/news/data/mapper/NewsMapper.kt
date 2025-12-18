@@ -4,6 +4,7 @@ import com.klyschenko.news.data.local.ArticleDBModel
 import com.klyschenko.news.data.remote.NewsResponseDto
 import com.klyschenko.news.domain.entity.Article
 import com.klyschenko.news.domain.entity.Interval
+import com.klyschenko.news.domain.entity.Language
 import java.text.SimpleDateFormat
 import java.util.Locale
 
@@ -23,6 +24,15 @@ fun NewsResponseDto.toDbModels(topic: String): List<ArticleDBModel> {
 
 fun Int.toInterval(): Interval {
     return Interval.entries.first { it.minutes == this }
+}
+
+fun Language.toQueryParam(): String {
+    return when (this) {
+        Language.ENGLISH -> "en"
+        Language.RUSSIAN -> "ru"
+        Language.FRENCH -> "fr"
+        Language.GERMAN -> "de"
+    }
 }
 
 fun List<ArticleDBModel>.toEntities(): List<Article> {

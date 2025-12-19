@@ -56,7 +56,6 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.klyschenko.news.R
 import com.klyschenko.news.domain.entity.Article
-import com.klyschenko.news.presentation.screen.settings.SettingScreen
 import com.klyschenko.news.presentation.ui.theme.CustomIcons
 import com.klyschenko.news.presentation.utils.formatDate
 

@@ -1,15 +1,11 @@
 package com.klyschenko.news.presentation
 
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
-import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.activity.result.contract.ActivityResultContracts
 import com.klyschenko.news.domain.repository.NewsRepository
-import com.klyschenko.news.presentation.screen.settings.SettingScreen
-import com.klyschenko.news.presentation.screen.subsriptions.SubscriptionsScreen
+import com.klyschenko.news.presentation.navigation.NavGraph
 import com.klyschenko.news.presentation.ui.theme.NewsTheme
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -25,10 +21,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NewsTheme {
-                val permissionLauncher = rememberLauncherForActivityResult(
-                    contract = ActivityResultContracts.RequestPermission(),
-                    onResult = {}
-                )
+                NavGraph()
+                // !!!!!!!!!!!!! Вернуть запрос на разрешение уведомлений
+//                val permissionLauncher = rememberLauncherForActivityResult(
+//                    contract = ActivityResultContracts.RequestPermission(),
+//                    onResult = {}
+//                )
 //                SubscriptionsScreen(
 //                    onNavigateToSettings = {
 ////                        val intent = Intent( this, MainActivity::class.java) // это явный intent
@@ -50,7 +48,7 @@ class MainActivity : ComponentActivity() {
 //                        }
 //                    }
 //                )
-                SettingScreen()
+////                SettingScreen()
             }
         }
     }

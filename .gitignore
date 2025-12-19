@@ -27,6 +27,4 @@ replay_pid*
 .kotlin/
 /.idea/
 /keystore.properties
-keystore.properties
-News/keystore.properties
-app/keystore.properties
+/News/keystore.properties

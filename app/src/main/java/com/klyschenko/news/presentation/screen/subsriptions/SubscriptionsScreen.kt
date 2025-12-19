@@ -56,6 +56,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import com.klyschenko.news.R
 import com.klyschenko.news.domain.entity.Article
+import com.klyschenko.news.presentation.screen.settings.SettingScreen
 import com.klyschenko.news.presentation.ui.theme.CustomIcons
 import com.klyschenko.news.presentation.utils.formatDate
 
@@ -80,13 +81,13 @@ fun SubscriptionsScreen(
                 onSettingsClick = onNavigateToSettings
             )
         }
-    ) { innerPading ->
+    ) { innerPadding ->
         val state by viewModel.state.collectAsState()
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            contentPadding = innerPading,
+            contentPadding = innerPadding,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item{

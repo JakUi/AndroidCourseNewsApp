@@ -26,7 +26,7 @@ fun NavGraph() {
         composable(Screen.Settings.route) {
             SettingScreen(
                 onBackButtonClick = {
-                    navController.navigate(Screen.Subscriptions.route)
+                    navController.popBackStack()
                 }
             )
         }

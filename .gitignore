@@ -29,3 +29,4 @@ replay_pid*
 /keystore.properties
 keystore.properties
 News/keystore.properties
+app/keystore.properties

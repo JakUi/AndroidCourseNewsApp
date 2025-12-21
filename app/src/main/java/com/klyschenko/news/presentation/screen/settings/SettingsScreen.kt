@@ -1,7 +1,10 @@
 @file:OptIn(ExperimentalMaterial3Api::class)
 
 package com.klyschenko.news.presentation.screen.settings
-
+import android.os.Build
+import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -32,14 +35,19 @@ import androidx.compose.ui.unit.dp
 import com.klyschenko.news.R
 import com.klyschenko.news.presentation.ui.theme.CustomIcons
 import androidx.compose.material3.TextField
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.NotificationManagerCompat
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.klyschenko.news.domain.entity.Language
 
 
 @Composable
 fun SettingScreen(
     modifier: Modifier = Modifier,
-    onBackButtonClick: () -> Unit
+    onBackButtonClick: () -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel()
 ) {
     Scaffold(
         modifier = modifier.padding(horizontal = 8.dp),
@@ -64,7 +72,8 @@ fun SettingScreen(
 
 
     ) { innerPadding ->
-//        val state by viewModel.state.collectAsState()
+        val state by viewModel.state.collectAsState()
+        Log.d("Debug", "State in compose is: $state")
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -152,14 +161,7 @@ fun SettingScreen(
                         text = "Show notifications about new articles",
                         color = MaterialTheme.colorScheme.secondary
                     )
-
-                    var checked by remember { mutableStateOf(true) } // ????????
-                    Switch(
-                        checked = checked,
-                        onCheckedChange = {
-                            checked = it
-                        }
-                    )
+                    NotificationsSwitcher(state, viewModel)
                 }
             }
 
@@ -188,11 +190,10 @@ fun SettingScreen(
                         color = MaterialTheme.colorScheme.secondary
                     )
 
-                    var checked by remember { mutableStateOf(true) } // ????????
                     Switch(
-                        checked = checked,
-                        onCheckedChange = {
-                            checked = it
+                        checked = state.wifiOnly,
+                        onCheckedChange = { enabled ->
+                            viewModel.processCommand(SettingsCommands.UpdateWifiOnly(enabled))
                         }
                     )
                 }
@@ -202,7 +203,6 @@ fun SettingScreen(
     }
 }
 
-//@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LanguageDropdown() {
 
@@ -278,11 +278,50 @@ fun IntervalDropdown() {
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
-                        selected = option
+                        selected = option // здесь возвращает значение.
                         expanded = false
                     }
                 )
             }
         }
     }
+}
+
+@Composable
+fun NotificationsSwitcher(
+    state: SettingsState,
+    viewModel: SettingsViewModel
+) {
+    val permissionLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.RequestPermission()
+    ) { granted ->
+        viewModel.processCommand(SettingsCommands.NotificationUpdate(granted))
+    }
+    val context = LocalContext.current
+
+    val areNotificationsAllowed =
+        NotificationManagerCompat.from(context).areNotificationsEnabled()
+
+    val checked = if (areNotificationsAllowed) {
+        state.notificationsEnabled
+    } else {
+        viewModel.processCommand(SettingsCommands.NotificationUpdate(false))
+        false
+    }
+
+    Switch(
+        checked = checked,
+        onCheckedChange = { enabled ->
+            if (!enabled) {
+                viewModel.processCommand(SettingsCommands.NotificationUpdate(false))
+                return@Switch
+            }
+
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+                viewModel.processCommand(SettingsCommands.NotificationUpdate(true))
+            } else {
+                permissionLauncher.launch(android.Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    )
 }

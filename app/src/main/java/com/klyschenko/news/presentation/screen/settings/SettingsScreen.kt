@@ -40,7 +40,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.app.NotificationManagerCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import com.klyschenko.news.domain.entity.Language
+import com.klyschenko.news.data.mapper.toIntervalDropdown
+import com.klyschenko.news.data.mapper.toLanguage
+import com.klyschenko.news.data.mapper.toMinutes
+import kotlin.collections.listOf
 
 
 @Composable
@@ -77,7 +80,6 @@ fun SettingScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-//            modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp)
         ) {
@@ -105,7 +107,13 @@ fun SettingScreen(
                         text = "Select language for news search",
                         color = MaterialTheme.colorScheme.secondary
                     )
-                    LanguageDropdown()
+                    DropdownMenu(
+                        options = listOf("English", "Русский", "Français", "Deutsch"),
+                        selected = state.language.lang,
+                        onSelected = { chosen ->
+                            viewModel.processCommand(SettingsCommands.UpdateLanguage(chosen.toLanguage()))
+                        }
+                    )
                 }
             }
 
@@ -133,7 +141,13 @@ fun SettingScreen(
                         text = "How often to update news",
                         color = MaterialTheme.colorScheme.secondary
                     )
-                    IntervalDropdown()
+                    DropdownMenu(
+                        options = listOf("15 minutes", "30 minutes", "1 hour", "2 hours", "8 hours", "24 hours"),
+                        selected = state.interval.minutes.toIntervalDropdown(),
+                        onSelected = { chosen ->
+                            viewModel.processCommand(SettingsCommands.UpdateInterval(chosen.toMinutes()))
+                        }
+                    )
                 }
             }
 
@@ -203,29 +217,26 @@ fun SettingScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LanguageDropdown() {
+fun DropdownMenu(
+    options: List<String>,
+    selected: String,
+    onSelected: (String) -> Unit
+) {
 
-    val options = Language.entries.map { it.lang }
     var expanded by remember { mutableStateOf(false) }
-    var selected by remember { mutableStateOf(options[0]) }
 
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded }
     ) {
-
         TextField(
             value = selected,
             onValueChange = {},
             readOnly = true,
-            label = { },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded)
-            },
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth()
+            trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded) },
+            modifier = Modifier.menuAnchor()
         )
 
         ExposedDropdownMenu(
@@ -236,49 +247,7 @@ fun LanguageDropdown() {
                 DropdownMenuItem(
                     text = { Text(option) },
                     onClick = {
-                        selected = option
-                        expanded = false
-                    }
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun IntervalDropdown() {
-
-    val options = listOf("15 minutes", "30 minutes", "1 hour", "2 hours", "8 hours", "24 hours")
-    var expanded by remember { mutableStateOf(false) }
-    var selected by remember { mutableStateOf(options[0]) }
-
-    ExposedDropdownMenuBox(
-        expanded = expanded,
-        onExpandedChange = { expanded = !expanded }
-    ) {
-
-        TextField(
-            value = selected,
-            onValueChange = {},
-            readOnly = true,
-            label = { },
-            trailingIcon = {
-                ExposedDropdownMenuDefaults.TrailingIcon(expanded)
-            },
-            modifier = Modifier
-                .menuAnchor()
-                .fillMaxWidth()
-        )
-
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = { expanded = false }
-        ) {
-            options.forEach { option ->
-                DropdownMenuItem(
-                    text = { Text(option) },
-                    onClick = {
-                        selected = option // здесь возвращает значение.
+                        onSelected(option)
                         expanded = false
                     }
                 )

@@ -3,6 +3,7 @@ package com.klyschenko.news.presentation.screen.settings
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.klyschenko.news.data.mapper.toInterval
 import com.klyschenko.news.domain.entity.Interval
 import com.klyschenko.news.domain.entity.Language
 import com.klyschenko.news.domain.entity.Settings
@@ -49,11 +50,17 @@ class SettingsViewModel @Inject constructor(
             }
 
             is SettingsCommands.UpdateInterval -> {
-
+                viewModelScope.launch {
+                    Log.d("Debug", "Interval chosen: ${command.minutes.toInterval()}")
+                    updateIntervalUseCase(interval = command.minutes.toInterval())
+                }
             }
 
             is SettingsCommands.UpdateLanguage -> {
-
+                viewModelScope.launch {
+                    Log.d("Debug", "Language chosen: ${command.language}")
+                    updateLanguageUseCase(language = command.language)
+                }
             }
 
             is SettingsCommands.UpdateWifiOnly -> {

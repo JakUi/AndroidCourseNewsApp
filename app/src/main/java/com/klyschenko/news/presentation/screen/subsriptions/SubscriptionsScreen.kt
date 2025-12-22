@@ -80,13 +80,13 @@ fun SubscriptionsScreen(
                 onSettingsClick = onNavigateToSettings
             )
         }
-    ) { innerPading ->
+    ) { innerPadding ->
         val state by viewModel.state.collectAsState()
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 16.dp),
-            contentPadding = innerPading,
+            contentPadding = innerPadding,
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             item{

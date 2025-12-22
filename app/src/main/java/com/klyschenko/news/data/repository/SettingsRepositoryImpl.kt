@@ -24,7 +24,7 @@ class SettingsRepositoryImpl @Inject constructor(
     @param:ApplicationContext private val context: Context
 ): SettingsRepository {
 
-    // для ключех DataStore указываем типы данных которые будут использоваться в качестве значения
+    // для ключей DataStore указываем типы данных которые будут использоваться в качестве значения
     private val languageKey = stringPreferencesKey("language")
     private val intervalKey = intPreferencesKey("interval")
     private val notificationsEnabledKey = booleanPreferencesKey("notifications_enabled")

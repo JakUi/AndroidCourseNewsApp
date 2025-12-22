@@ -76,7 +76,6 @@ fun SettingScreen(
 
     ) { innerPadding ->
         val state by viewModel.state.collectAsState()
-        Log.d("Debug", "State in compose is: $state")
         Column(
             modifier = Modifier
                 .padding(innerPadding)
@@ -99,12 +98,12 @@ fun SettingScreen(
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp),
-                        text = "Search Language",
+                        text = stringResource(R.string.search_language),
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
                         modifier = Modifier.padding(start = 8.dp),
-                        text = "Select language for news search",
+                        text = stringResource(R.string.select_language_for_news_search),
                         color = MaterialTheme.colorScheme.secondary
                     )
                     DropdownMenu(
@@ -133,12 +132,12 @@ fun SettingScreen(
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp),
-                        text = "Update Interval",
+                        text = stringResource(R.string.update_interval),
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
                         modifier = Modifier.padding(start = 8.dp),
-                        text = "How often to update news",
+                        text = stringResource(R.string.how_often_to_update_news),
                         color = MaterialTheme.colorScheme.secondary
                     )
                     DropdownMenu(
@@ -167,12 +166,12 @@ fun SettingScreen(
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp),
-                        text = "Notifications",
+                        text = stringResource(R.string.notifications),
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
                         modifier = Modifier.padding(start = 8.dp),
-                        text = "Show notifications about new articles",
+                        text = stringResource(R.string.show_notifications_about_new_articles),
                         color = MaterialTheme.colorScheme.secondary
                     )
                     NotificationsSwitcher(state, viewModel)
@@ -195,12 +194,12 @@ fun SettingScreen(
                 ) {
                     Text(
                         modifier = Modifier.padding(top = 8.dp, start = 8.dp),
-                        text = "Update only via Wi-Fi",
+                        text = stringResource(R.string.update_only_via_wi_fi),
                         fontWeight = FontWeight.Bold,
                     )
                     Text(
                         modifier = Modifier.padding(start = 8.dp),
-                        text = "Save mobile data",
+                        text = stringResource(R.string.save_mobile_data),
                         color = MaterialTheme.colorScheme.secondary
                     )
 

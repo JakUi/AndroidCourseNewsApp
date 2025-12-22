@@ -40,31 +40,24 @@ class SettingsViewModel @Inject constructor(
     }
 
     fun processCommand(command: SettingsCommands) {
-        when (command) {
-
-            is SettingsCommands.NotificationUpdate -> {
-                viewModelScope.launch {
+        viewModelScope.launch {
+            when (command) {
+                is SettingsCommands.NotificationUpdate -> {
                     Log.d("Debug", "Command is ${command.enabled}")
                     notificationUpdatedUseCase(command.enabled)
                 }
-            }
 
-            is SettingsCommands.UpdateInterval -> {
-                viewModelScope.launch {
+                is SettingsCommands.UpdateInterval -> {
                     Log.d("Debug", "Interval chosen: ${command.minutes.toInterval()}")
                     updateIntervalUseCase(interval = command.minutes.toInterval())
                 }
-            }
 
-            is SettingsCommands.UpdateLanguage -> {
-                viewModelScope.launch {
+                is SettingsCommands.UpdateLanguage -> {
                     Log.d("Debug", "Language chosen: ${command.language}")
                     updateLanguageUseCase(language = command.language)
                 }
-            }
 
-            is SettingsCommands.UpdateWifiOnly -> {
-                viewModelScope.launch {
+                is SettingsCommands.UpdateWifiOnly -> {
                     updateWifiOnlyUseCase(command.wifiOnly)
                 }
             }
